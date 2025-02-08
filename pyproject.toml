@@ -1,0 +1,21 @@
+[tool.ruff]
+# Set the maximum line length (adjust if needed)
+line-length = 88
+
+# Specify your target Python version (adjust to your project version)
+target-version = "py310"
+
+# Exclude directories that should not be linted
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".env",
+    ".venv",
+]
+
+# Optional: Define specific codes to select or ignore
+# Example: Uncomment and modify the following lines if desired.
+# select = ["E", "F", "W", "C", "N", "I"]
+# ignore = ["E501"] 

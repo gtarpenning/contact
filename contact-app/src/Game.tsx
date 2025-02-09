@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getInitialWord, handleMsg } from './llm'
 
 const HISTORY_SIZE = 10

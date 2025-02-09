@@ -5,7 +5,6 @@ const HISTORY_SIZE = 10
 
 type Props = {
   onEnd: () => void
-  score: number
   onScoreChange: (score: number) => void
 }
 
@@ -16,7 +15,7 @@ type HistoryEntry = {
 }
 
 
-export default function Game({ onEnd, score, onScoreChange }: Props) {
+export default function Game({ onEnd, onScoreChange }: Props) {
   const [llmWord, setLlmWord] = useState('')
   const [nextLLMWord, setNextLLMWord] = useState('')
   const [userWord, setUserWord] = useState('')
@@ -38,10 +37,10 @@ export default function Game({ onEnd, score, onScoreChange }: Props) {
   }, [wordHistory])
 
   const submitWord = useCallback(async (word: string) => {
-    if (wordInHistory(word, wordHistory)) {
-      setError(`The last ${HISTORY_SIZE} words can't be guessed.`)
-      return
-    }
+    // if (wordInHistory(word, wordHistory)) {
+    //   setError(`The last ${HISTORY_SIZE} words can't be guessed.`)
+    //   return
+    // }
     if (word.trim() === '') {
       return
     }
@@ -59,18 +58,18 @@ export default function Game({ onEnd, score, onScoreChange }: Props) {
     const newLlmWord = await getLLMWord(word, nextLLMWord, flattenedHistory)
     
     setWordHistory([...wordHistory, { llmWord: nextLLMWord, userWord: word, llmResponse: newLlmWord }])
-    onScoreChange(score + 1)
+    onScoreChange(wordHistory.length)
 
     setUserWord(word)
     setLlmWord(nextLLMWord)
     setNextLLMWord(newLlmWord)
-  }, [wordHistory, llmWord, nextLLMWord, onEnd, score, onScoreChange])
+  }, [wordHistory, llmWord, nextLLMWord, onEnd, onScoreChange])
 
   const readyToShow = llmWord && userWord
 
   return (
     <div>
-      {userWord === '' ? <h2>Begin by entering a starting word</h2> : <h3>Guesses: {score}</h3>}
+      {userWord === '' ? <h2>Begin by entering a starting word</h2> : <h3>Guesses: {wordHistory.length}</h3>}
       {userWord === '' && <div style={{ fontStyle: 'italic', marginBottom: '10px' }}>How well can you think like an ai?</div>}
     <InputTextBox onSubmit={submitWord} placeholder="Enter your word" />
       {error && <p style={{ color: 'red' }}>{error}</p>}

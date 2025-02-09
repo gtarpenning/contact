@@ -15,7 +15,7 @@ function App() {
     <>
       <div>
         {mode === 'splash' && <Splash onStart={() => setMode('game')} />}
-        {mode === 'game' && <Game onEnd={() => setMode('results')} score={score} onScoreChange={setScore} />}
+        {mode === 'game' && <Game onEnd={() => setMode('results')} onScoreChange={setScore} />}
         {mode === 'results' && <Results score={score} />}
       </div>
     </>

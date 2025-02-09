@@ -99,7 +99,7 @@ async function getLLMWord(userWord: string, llmWord: string, history: string[]) 
   }
 
 function wordInHistory(word: string, history: HistoryEntry[]) {
-  return history.some(entry => entry.llmWord === word || entry.userWord === word)
+  return history.slice(-HISTORY_SIZE).some(entry => entry.llmWord === word || entry.userWord === word)
 }
 
 function flattenHistory(history: HistoryEntry[]) {

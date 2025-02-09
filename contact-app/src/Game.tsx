@@ -35,7 +35,7 @@ export default function Game({ onEnd }: Props) {
       setError(`The last ${HISTORY_SIZE} words can't be guessed.`)
       return
     }
-    if (word.trim() === '') {
+    if (word === '') {
       return
     }
     if (word === nextLLMWord) {
@@ -128,7 +128,7 @@ const InputTextBox = ({ onSubmit, placeholder }: { onSubmit: (word: string) => v
 
   return (
     <div>
-      <input type="text" maxLength={20} placeholder={placeholderText} value={word} onChange={(e) => setWord(e.target.value.toLowerCase())} />
+      <input type="text" maxLength={20} placeholder={placeholderText} value={word} onChange={(e) => setWord(e.target.value.toLowerCase().trim())} />
     </div>
   )
 }

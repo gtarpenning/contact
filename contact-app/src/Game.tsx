@@ -37,10 +37,10 @@ export default function Game({ onEnd, onScoreChange }: Props) {
   }, [wordHistory])
 
   const submitWord = useCallback(async (word: string) => {
-    // if (wordInHistory(word, wordHistory)) {
-    //   setError(`The last ${HISTORY_SIZE} words can't be guessed.`)
-    //   return
-    // }
+    if (wordInHistory(word, wordHistory)) {
+      setError(`The last ${HISTORY_SIZE} words can't be guessed.`)
+      return
+    }
     if (word.trim() === '') {
       return
     }
@@ -104,7 +104,7 @@ function wordInHistory(word: string, history: HistoryEntry[]) {
 
 function flattenHistory(history: HistoryEntry[]) {
     const rawHistory: string[] = []
-    history.slice(0, -1).map(entry => {
+    history.map(entry => {
         rawHistory.push(entry.llmWord)
         rawHistory.push(entry.userWord)
         return entry.llmResponse
@@ -120,7 +120,7 @@ function HistoryList({ history }: { history: HistoryEntry[] }) {
     <div style={{marginTop: '50px'}}>
       <h3>History</h3>
       {fullHistory.map((entry, index) => (
-        <div key={index} style={{ display: 'grid', gridTemplateColumns: '100px 100px 0px 100px', gap: '10px' }}>
+        <div key={index} style={{ display: 'grid', gridTemplateColumns: '120px 120px 0px 120px', gap: '10px' }}>
           <div>{entry.userWord}</div>
           <div>{entry.llmWord}</div>
           <div>→</div>

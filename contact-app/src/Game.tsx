@@ -5,10 +5,11 @@ const HISTORY_SIZE = 10
 
 type Props = {
   onEnd: () => void
+  score: number
+  onScoreChange: (score: number) => void
 }
 
-export default function Game({ onEnd }: Props) {
-  const [score, setScore] = useState(0)
+export default function Game({ onEnd, score, onScoreChange }: Props) {
   const [llmWord, setLlmWord] = useState('')
   const [userWord, setUserWord] = useState('')
   const [history, setHistory] = useState<string[]>([])
@@ -33,11 +34,11 @@ export default function Game({ onEnd }: Props) {
       return
     }
     setHistory([...history, newLlmWord, pendingUserWord])
-    setScore(prev => prev + 1)
+    onScoreChange(score + 1)
     setLlmWord(newLlmWord)
     // Update the displayed user word only after the result is computed.
     setUserWord(pendingUserWord)
-  }, [history, llmWord, onEnd])
+  }, [history, llmWord, onEnd, score, onScoreChange])
 
   const readyToShow = llmWord && userWord
 

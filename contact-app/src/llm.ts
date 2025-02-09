@@ -63,7 +63,7 @@ export async function handleMsg(msg: string, prevMsg: string, history: string[])
 export async function getInitialWord(): Promise<string> {
     try {
         const stream = await client.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: [{ role: "system", content: INITIAL_PROMPT }],
             max_tokens: 20,
         });

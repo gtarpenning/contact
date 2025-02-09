@@ -9,8 +9,6 @@ type Mode = 'splash' | 'game' | 'results'
 function App() {
   const [mode, setMode] = useState<Mode>('splash')
 
-  console.log("game mode", mode)
-
   return (
     <>
       <div>

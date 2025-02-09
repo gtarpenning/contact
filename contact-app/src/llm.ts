@@ -11,7 +11,12 @@ const client = new OpenAI({
 const SYSTEM_PROMPT_S = `
 Find the semantic/logical midpoint between the two words. 
 Only respond with the word, nothing else.
-You cannot use previous words! They will be provided.
+When possible, respond with the most common word.
+Example:
+  word1: sailing, word2: sailboat
+  response: sail
+
+You cannot use previous words! Prohibited words will be provided.
 `;
 
 const INITIAL_PROMPT = `
@@ -34,11 +39,11 @@ ONLY respond with the exact word, nothing else.
  */
 export async function handleMsg(msg: string, prevMsg: string, history: string[]): Promise<string> {
     // Create the user prompt similar to the Python function.
-    const userPrompt = `previous words: [${history.join(', ')}], word1: ${prevMsg}, word2: ${msg}`;
+    const userPrompt = `Prohibited words: [${history.join(', ')}], word1: ${prevMsg}, word2: ${msg}`;
     
     try {
         const stream = await client.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: SYSTEM_PROMPT_S },
                 { role: "user", content: userPrompt }
@@ -48,7 +53,7 @@ export async function handleMsg(msg: string, prevMsg: string, history: string[])
  
         const output = stream.choices[0]?.message?.content || '';
  
-        return output;
+        return output.toLowerCase();
     } catch (error) {
         console.error("Error:", error);
         throw error;
@@ -65,7 +70,7 @@ export async function getInitialWord(): Promise<string> {
 
         const output = stream.choices[0]?.message?.content || '';
 
-        return output;
+        return output.toLowerCase();
     } catch (error) {
         console.error("Error:", error);
         throw error;

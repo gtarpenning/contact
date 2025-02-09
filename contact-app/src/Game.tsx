@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getInitialWord, handleMsg } from './llm'
 
 const HISTORY_SIZE = 10
@@ -9,74 +9,127 @@ type Props = {
   onScoreChange: (score: number) => void
 }
 
+type HistoryEntry = {
+    llmWord: string
+    userWord: string
+    llmResponse: string
+}
+
+
 export default function Game({ onEnd, score, onScoreChange }: Props) {
   const [llmWord, setLlmWord] = useState('')
+  const [nextLLMWord, setNextLLMWord] = useState('')
   const [userWord, setUserWord] = useState('')
-  const [history, setHistory] = useState<string[]>([])
 
+  const [wordHistory, setWordHistory] = useState<HistoryEntry[]>([])
   const [error, setError] = useState<string | null>(null)
 
+  const loadingInitialWord = useRef(false)
+
+  useEffect(() => {
+    if (wordHistory.length > 0 || loadingInitialWord.current) {
+        return
+    }
+    loadingInitialWord.current = true
+    getInitialWord().then((w) => {
+        setNextLLMWord(w)
+        loadingInitialWord.current = false
+    })
+  }, [wordHistory])
+
   const submitWord = useCallback(async (word: string) => {
-    if (history.slice(-HISTORY_SIZE).some(w => w === word)) {
+    if (wordInHistory(word, wordHistory)) {
       setError(`The last ${HISTORY_SIZE} words can't be guessed.`)
       return
     }
     if (word.trim() === '') {
       return
     }
-    setError(null)
-    // Store the user's submission locally without updating state immediately.
-    const pendingUserWord = word
-    // Wait for the LLM's response before updating any displayed word.
-    const newLlmWord = llmWord === '' ? await getInitialWord() : await handleMsg(pendingUserWord, llmWord, history.slice(-HISTORY_SIZE))
-    if (pendingUserWord === newLlmWord) {
-      onEnd()
-      return
+    if (word === nextLLMWord) {
+        onEnd()
+        return
     }
-    setHistory([...history, newLlmWord, pendingUserWord])
+    if (!nextLLMWord) {
+        console.error('No next LLM word', wordHistory, llmWord, word)
+        return
+    }
+    setError(null)
+
+    const flattenedHistory = flattenHistory(wordHistory)
+    const newLlmWord = await getLLMWord(word, nextLLMWord, flattenedHistory)
+    
+    setWordHistory([...wordHistory, { llmWord: nextLLMWord, userWord: word, llmResponse: newLlmWord }])
     onScoreChange(score + 1)
-    setLlmWord(newLlmWord)
-    // Update the displayed user word only after the result is computed.
-    setUserWord(pendingUserWord)
-  }, [history, llmWord, onEnd, score, onScoreChange])
+
+    setUserWord(word)
+    setLlmWord(nextLLMWord)
+    setNextLLMWord(newLlmWord)
+  }, [wordHistory, llmWord, nextLLMWord, onEnd, score, onScoreChange])
 
   const readyToShow = llmWord && userWord
-
-  const reversedHistory = [...history].reverse()
 
   return (
     <div>
       {userWord === '' ? <h2>Begin by entering a starting word</h2> : <h3>Guesses: {score}</h3>}
-      <div style={{ fontStyle: 'italic', marginBottom: '10px' }}>How well can you think like an ai?</div>
+      {userWord === '' && <div style={{ fontStyle: 'italic', marginBottom: '10px' }}>How well can you think like an ai?</div>}
     <InputTextBox onSubmit={submitWord} placeholder="Enter your word" />
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div>
-        {userWord && <p>Find the midpoint between:</p>}
+        {userWord && <p>Find the midpoint</p>}
         {readyToShow && (
-          <div style={{ display: 'flex', gap: '50px' }}>
-            <span>{userWord}</span>
-            <span>**{llmWord}**</span>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '150px 150px', 
+            gap: '10px',
+            justifyContent: 'center',
+            fontSize: '1.5rem',
+            fontWeight: '600'
+          }}>
+            <div>{userWord}</div>
+            <div>{llmWord}</div>
           </div>
         )}
       </div>
-      {history.length > 0 && (
-        <div style={{ marginTop: '100px'}}>
-          <div>
-            <h3>History</h3>
-            <div style={{ fontWeight: 'bold' }}>
-            {reversedHistory.slice(0, HISTORY_SIZE).map(word => <div key={word}>{word}</div>)}
-          </div>
-          {history.length > HISTORY_SIZE && (
-            <div>
-              {reversedHistory.slice(HISTORY_SIZE, HISTORY_SIZE+6).map(word => <div key={word}>{word}</div>)}
-              {history.length > HISTORY_SIZE+6 && (<span>...</span>)}
-            </div>
-          )}
-        </div>
-        </div>
-      )}
+      <HistoryList history={wordHistory} />
     </div>
   )
+}
+
+async function getLLMWord(userWord: string, llmWord: string, history: string[]) {
+    return await handleMsg(userWord, llmWord, history.slice(-HISTORY_SIZE))
+  }
+
+function wordInHistory(word: string, history: HistoryEntry[]) {
+  return history.some(entry => entry.llmWord === word || entry.userWord === word)
+}
+
+function flattenHistory(history: HistoryEntry[]) {
+    const rawHistory: string[] = []
+    history.slice(0, -1).map(entry => {
+        rawHistory.push(entry.llmWord)
+        rawHistory.push(entry.userWord)
+        return entry.llmResponse
+    })
+    return rawHistory
+}
+
+function HistoryList({ history }: { history: HistoryEntry[] }) {
+
+    const fullHistory = [...history].reverse().slice(1)
+  return (
+    fullHistory.length > 0 && (
+    <div style={{marginTop: '50px'}}>
+      <h3>History</h3>
+      {fullHistory.map((entry, index) => (
+        <div key={index} style={{ display: 'grid', gridTemplateColumns: '100px 100px 0px 100px', gap: '10px' }}>
+          <div>{entry.userWord}</div>
+          <div>{entry.llmWord}</div>
+          <div>→</div>
+          <div>{entry.llmResponse}</div>
+        </div>
+      ))}
+    </div>
+  ))
 }
 
 const InputTextBox = ({ onSubmit, placeholder }: { onSubmit: (word: string) => void, placeholder?: string }) => {

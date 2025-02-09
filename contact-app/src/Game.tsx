@@ -100,7 +100,7 @@ const InputTextBox = ({ onSubmit, placeholder }: { onSubmit: (word: string) => v
 
   return (
     <div>
-      <input type="text" maxLength={20} placeholder={placeholderText} value={word} onChange={(e) => setWord(e.target.value)} />
+      <input type="text" maxLength={20} placeholder={placeholderText} value={word} onChange={(e) => setWord(e.target.value.toLowerCase())} />
     </div>
   )
 }

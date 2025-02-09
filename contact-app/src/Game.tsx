@@ -1,21 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getInitialWord, handleMsg } from './llm'
+import { FinalResponse, HistoryEntry } from './types'
+import HistoryList from './components/HistoryList'
 
 const HISTORY_SIZE = 10
 
 type Props = {
-  onEnd: () => void
-  onScoreChange: (score: number) => void
+  onEnd: (history: HistoryEntry[]) => void
 }
 
-type HistoryEntry = {
-    llmWord: string
-    userWord: string
-    llmResponse: string
-}
-
-
-export default function Game({ onEnd, onScoreChange }: Props) {
+export default function Game({ onEnd }: Props) {
   const [llmWord, setLlmWord] = useState('')
   const [nextLLMWord, setNextLLMWord] = useState('')
   const [userWord, setUserWord] = useState('')
@@ -45,8 +39,7 @@ export default function Game({ onEnd, onScoreChange }: Props) {
       return
     }
     if (word === nextLLMWord) {
-        onScoreChange(wordHistory.length + 1)
-        onEnd()
+        onEnd([...wordHistory, { llmWord: nextLLMWord, userWord: word, llmResponse: FinalResponse }])
         return
     }
     if (!nextLLMWord) {
@@ -59,14 +52,15 @@ export default function Game({ onEnd, onScoreChange }: Props) {
     const newLlmWord = await getLLMWord(word, nextLLMWord, flattenedHistory)
     
     setWordHistory([...wordHistory, { llmWord: nextLLMWord, userWord: word, llmResponse: newLlmWord }])
-    onScoreChange(wordHistory.length)
 
     setUserWord(word)
     setLlmWord(nextLLMWord)
     setNextLLMWord(newLlmWord)
-  }, [wordHistory, llmWord, nextLLMWord, onEnd, onScoreChange])
+  }, [wordHistory, llmWord, nextLLMWord, onEnd])
 
   const readyToShow = llmWord && userWord
+
+  const historyReversed = [...wordHistory].reverse().slice(1)
 
   return (
     <div>
@@ -90,7 +84,7 @@ export default function Game({ onEnd, onScoreChange }: Props) {
           </div>
         )}
       </div>
-      <HistoryList history={wordHistory} />
+      <HistoryList history={historyReversed} />
     </div>
   )
 }
@@ -111,25 +105,6 @@ function flattenHistory(history: HistoryEntry[]) {
         return entry.llmResponse
     })
     return rawHistory
-}
-
-function HistoryList({ history }: { history: HistoryEntry[] }) {
-
-    const fullHistory = [...history].reverse().slice(1)
-  return (
-    fullHistory.length > 0 && (
-    <div style={{marginTop: '50px'}}>
-      <h3>History</h3>
-      {fullHistory.map((entry, index) => (
-        <div key={index} style={{ display: 'grid', gridTemplateColumns: '120px 120px 0px 120px', gap: '10px' }}>
-          <div>{entry.userWord}</div>
-          <div>{entry.llmWord}</div>
-          <div>→</div>
-          <div>{entry.llmResponse}</div>
-        </div>
-      ))}
-    </div>
-  ))
 }
 
 const InputTextBox = ({ onSubmit, placeholder }: { onSubmit: (word: string) => void, placeholder?: string }) => {

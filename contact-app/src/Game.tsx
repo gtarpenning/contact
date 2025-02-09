@@ -45,6 +45,7 @@ export default function Game({ onEnd, onScoreChange }: Props) {
       return
     }
     if (word === nextLLMWord) {
+        onScoreChange(wordHistory.length + 1)
         onEnd()
         return
     }

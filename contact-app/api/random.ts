@@ -11,6 +11,10 @@ generate a *random* word, examples:
 - despair
 - purple
 - jellybean
+- onomonopeia
+- kumquat
+- worm
+- marxism
 
 ONLY respond with the exact word, nothing else.
 `;

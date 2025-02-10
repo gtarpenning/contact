@@ -6,12 +6,12 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const SYSTEM_PROMPT_S = `
 Find the semantic/logical midpoint between the two words. 
 Only respond with the word, nothing else.
-When possible, respond with the most common word.
+When possible, respond with a common word.
 Example:
   word1: sailing, word2: sailboat
   response: sail
 
-You cannot use previous words! Prohibited words will be provided.
+Try to not use previous words, unless its a perfect fit.
 `;
 
 // const client = wrapOpenAI(new OpenAI());

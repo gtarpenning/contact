@@ -56,7 +56,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // await weave.login(process.env.WANDB_API_KEY ?? '');
+    await weave.login(process.env.WANDB_API_KEY ?? '');
     await weave.init('contact-ts');
 
     const body = await req.body as MsgRequestBody;

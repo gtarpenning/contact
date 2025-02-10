@@ -31,10 +31,6 @@ export default function Game({ onEnd }: Props) {
   }, [wordHistory])
 
   const submitWord = useCallback(async (word: string) => {
-    if (wordInHistory(word, wordHistory)) {
-      setError(`The last ${HISTORY_SIZE} words can't be guessed.`)
-      return
-    }
     if (word === '') {
       return
     }
@@ -65,8 +61,8 @@ export default function Game({ onEnd }: Props) {
   return (
     <div>
       {userWord === '' ? <h2>Begin by entering a starting word</h2> : <h3>Guesses: {wordHistory.length}</h3>}
-      {userWord === '' && <div style={{ fontStyle: 'italic', marginBottom: '10px' }}>How well can you think like an ai?</div>}
-    <InputTextBox onSubmit={submitWord} placeholder="Enter your word" />
+      {userWord === '' && <div style={{ fontStyle: 'italic', marginBottom: '30px' }}>How well can you think like an ai?</div>}
+        {nextLLMWord !== '' && <InputTextBox onSubmit={submitWord} placeholder="Enter your word" />}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div>
         {userWord && <p>Find the midpoint</p>}
@@ -93,9 +89,6 @@ async function getLLMWord(userWord: string, llmWord: string, history: string[]) 
     return await handleMsg(userWord, llmWord, history.slice(-HISTORY_SIZE))
   }
 
-function wordInHistory(word: string, history: HistoryEntry[]) {
-  return history.slice(-HISTORY_SIZE).some(entry => entry.llmWord === word || entry.userWord === word)
-}
 
 function flattenHistory(history: HistoryEntry[]) {
     const rawHistory: string[] = []

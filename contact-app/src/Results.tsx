@@ -3,8 +3,8 @@ import { HistoryEntry } from './types'
 
 const Results = ({ history }: { history: HistoryEntry[] }) => {
 
-
-  return <div>
+  return (
+  <div>
     <h1>CONTACT</h1>
     <div>
         <p>You just made contact with an AI...</p>
@@ -14,6 +14,7 @@ const Results = ({ history }: { history: HistoryEntry[] }) => {
         <HistoryList history={history} />
     </div>
   </div>
+  )
 }
 
 export default Results

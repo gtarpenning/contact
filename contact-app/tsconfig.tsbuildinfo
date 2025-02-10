@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/game.tsx","./src/results.tsx","./src/splash.tsx","./src/llm.ts","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/components/historylist.tsx","./api/msg.ts","./api/random.ts"],"version":"5.7.3"}

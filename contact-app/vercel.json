@@ -14,11 +14,12 @@
       }
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/api/$1",
-      "methods": ["GET", "POST"]
+  "functions": {
+    "api/msg.ts": {
+      "maxDuration": 10
+    },
+    "api/random.ts": {
+      "maxDuration": 10
     }
-  ]
+  }
 } 

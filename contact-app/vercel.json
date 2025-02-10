@@ -13,5 +13,12 @@
         "buildCommand": "npm run build"
       }
     }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/$1",
+      "methods": ["GET", "POST"]
+    }
   ]
 } 

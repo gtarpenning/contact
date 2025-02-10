@@ -11,12 +11,12 @@ const client = new OpenAI({
 const SYSTEM_PROMPT_S = `
 Find the semantic/logical midpoint between the two words. 
 Only respond with the word, nothing else.
-When possible, respond with the most common word.
+When possible, respond with the a common word.
 Example:
   word1: sailing, word2: sailboat
   response: sail
 
-You cannot use previous words! Prohibited words will be provided.
+Try to not use previous word, unless its really great fit!
 `;
 
 const INITIAL_PROMPT = `
@@ -25,6 +25,10 @@ generate a *random* word, examples:
 - despair
 - purple
 - jellybean
+- onomonopeia
+- kumquat
+- worm
+- marxism
 
 ONLY respond with the exact word, nothing else.
 `;
@@ -39,7 +43,7 @@ ONLY respond with the exact word, nothing else.
  */
 export async function handleMsg(msg: string, prevMsg: string, history: string[]): Promise<string> {
     // Create the user prompt similar to the Python function.
-    const userPrompt = `Prohibited words: [${history.join(', ')}], word1: ${prevMsg}, word2: ${msg}`;
+    const userPrompt = `Previous words: [${history.join(', ')}], word1: ${prevMsg}, word2: ${msg}`;
     
     try {
         const stream = await client.chat.completions.create({

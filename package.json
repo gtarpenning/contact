@@ -1,14 +1,18 @@
 {
   "dependencies": {
     "@vercel/node": "^5.1.2",
+    "@vitejs/plugin-react-swc": "^3.8.0",
     "litellm": "^0.12.0",
     "weave": "^0.7.5"
   },
   "devDependencies": {
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "@vercel/analytics": "^1.4.1",
+    "@vercel/analytics": "^1.5.0",
     "@vitejs/plugin-react": "^4.3.4",
     "vite": "^6.1.0"
+  },
+  "scripts": {
+    "build": "vercel build"
   }
 }

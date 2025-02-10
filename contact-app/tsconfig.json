@@ -14,9 +14,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "rootDir": "./api",
-    "outDir": "./build"
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "api"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -1,5 +1,4 @@
 import { OpenAI } from 'openai';
-import weave, { op, wrapOpenAI } from 'weave';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 
@@ -14,8 +13,8 @@ Example:
 Try to not use previous words, unless its a perfect fit.
 `;
 
-const client = wrapOpenAI(new OpenAI());
-// const client = new OpenAI();
+// const client = wrapOpenAI(new OpenAI());
+const client = new OpenAI();
 
 interface MsgRequestBody {
   msg: string;
@@ -56,15 +55,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    await weave.login(process.env.WANDB_API_KEY ?? '');
-    await weave.init('contact-ts');
+    // await weave.login(process.env.WANDB_API_KEY ?? '');
+    // await weave.init('contact-ts');
 
     const body = await req.body as MsgRequestBody;
     const { msg, prevMsg, history } = body;
 
-    const handleMsgWrapped = op(handleMsg);
+    // const handleMsgWrapped = op(handleMsg);
     
-    const result = await handleMsgWrapped(msg, prevMsg, history);
+    const result = await handleMsg(msg, prevMsg, history);
     return res.status(200).json({ response: result });
   } catch (e) {
     console.error('Error in handler:', e);

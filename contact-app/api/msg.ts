@@ -32,6 +32,7 @@ async function handleMsg(msg: string, prevMsg: string, history: string[]): Promi
           { role: "user", content: userPrompt },
         ],
         max_tokens: 20,
+        temperature: 1,
       });
   
       return completion.choices[0].message.content ?? '';

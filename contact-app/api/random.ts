@@ -39,6 +39,7 @@ async function getInitialWord() {
         { role: "system", content: prompt }
       ],
       max_tokens: 20,
+      temperature: 1,
     });
 
     return model.choices[0].message.content?.toLowerCase() ?? '';

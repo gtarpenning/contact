@@ -5,26 +5,38 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // const client = wrapOpenAI(new OpenAI());
 const client = new OpenAI();
 
+const randomWords = [
+  'guacamole',
+  'despair',
+  'purple',
+  'jellybean',
+  'onomonopeia',
+  'kumquat',
+  'worm',
+  'marxism',
+  'sailing',
+  'apple',
+  'banana',
+]
+
+const SENTINEL = '<INSERT>';
 const SYSTEM_PROMPT_INITIAL = `
-generate a *random* word, examples: 
-- guacamole
-- despair
-- purple
-- jellybean
-- onomonopeia
-- kumquat
-- worm
-- marxism
+generate a *random* word, examples: ${SENTINEL}
+
+DONT use these words: [quokka, lollipop, quasar, serendipity]
 
 ONLY respond with the exact word, nothing else.
 `;
 
 async function getInitialWord() {
+  const shuffledWords = [...randomWords].sort(() => Math.random() - 0.5);
+  const randomThreeWords = shuffledWords.slice(0, 3);
+  const prompt = SYSTEM_PROMPT_INITIAL.replace(SENTINEL, randomThreeWords.join(', '));
   try {
     const model = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: SYSTEM_PROMPT_INITIAL }
+        { role: "system", content: prompt }
       ],
       max_tokens: 20,
     });

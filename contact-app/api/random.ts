@@ -15,13 +15,13 @@ const randomWords = [
   'worm',
   'marxism',
   'sailing',
-  'apple',
-  'banana',
+  'meloncholy',
+  'severed'
 ]
 
 const SENTINEL = '<INSERT>';
 const SYSTEM_PROMPT_INITIAL = `
-generate a *random* word, examples: ${SENTINEL}
+generate an interesting *random* word, examples: ${SENTINEL}
 
 DONT use these words: [quokka, lollipop, quasar, serendipity]
 
@@ -39,7 +39,7 @@ async function getInitialWord() {
         { role: "system", content: prompt }
       ],
       max_tokens: 20,
-      temperature: 1,
+      temperature: 1.6,
     });
 
     return model.choices[0].message.content?.toLowerCase() ?? '';

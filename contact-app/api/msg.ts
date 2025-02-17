@@ -4,13 +4,17 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const SYSTEM_PROMPT_S = `
 Find the semantic/logical midpoint between the two words. 
+
 Only respond with the word, nothing else.
 When possible, respond with a common word.
+
 Example:
   word1: sailing, word2: sailboat
-  response: sail
+  possible responses: sail, boat, ocean
 
-Try to not use previous words, unless its a perfect fit.
+Example:
+  word1: tree, word2: house
+  possible responses: treehouse, wood
 `;
 
 // const client = wrapOpenAI(new OpenAI());
@@ -19,12 +23,11 @@ const client = new OpenAI();
 interface MsgRequestBody {
   msg: string;
   prevMsg: string;
-  history: string[];
 }
 
-async function handleMsg(msg: string, prevMsg: string, history: string[]): Promise<string> {
+async function handleMsg(msg: string, prevMsg: string): Promise<string> {
     try {
-      const userPrompt = `previous: ${history}, word1: ${prevMsg}, word2: ${msg}`;
+      const userPrompt = `word1: ${prevMsg}, word2: ${msg}`;
       const completion = await client.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
@@ -60,11 +63,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // await weave.init('contact-ts');
 
     const body = await req.body as MsgRequestBody;
-    const { msg, prevMsg, history } = body;
+    const { msg, prevMsg } = body;
 
     // const handleMsgWrapped = op(handleMsg);
     
-    const result = await handleMsg(msg, prevMsg, history);
+    const result = await handleMsg(msg, prevMsg);
     return res.status(200).json({ response: result });
   } catch (e) {
     console.error('Error in handler:', e);

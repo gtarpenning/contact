@@ -5,17 +5,16 @@
  *
  * @param msg - The word to send to the LLM.
  * @param prevMsg - The previous word.
- * @param history - The list of previous messages/words.
  * @returns The response from the LLM.
  */
-export const handleMsg = async (msg: string, prevMsg: string, history: string[]): Promise<string> => {
+export const handleMsg = async (msg: string, prevMsg: string): Promise<string> => {
     try {
         const response = await fetch(`/api/msg`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ msg, prevMsg, history }),
+            body: JSON.stringify({ msg, prevMsg }),
         });
 
         if (!response.ok) {

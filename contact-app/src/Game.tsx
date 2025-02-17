@@ -191,7 +191,11 @@ const InputTextBox = ({ onSubmit, placeholder }: { onSubmit: (word: string) => v
     }
   }, [onSubmit, word])
 
-  // register the submitWord function to the enter key
+  const handleButtonSubmit = useCallback(() => {
+    onSubmit(word)
+    setWord('')
+  }, [onSubmit, word])
+
   useEffect(() => {
     document.addEventListener('keydown', handleSubmit)
     return () => {
@@ -200,7 +204,7 @@ const InputTextBox = ({ onSubmit, placeholder }: { onSubmit: (word: string) => v
   }, [handleSubmit])
 
   return (
-    <div style={{ width: '300px', margin: '0 auto' }}>
+    <div style={{ width: '300px', margin: '0 auto', display: 'flex', gap: '5px' }}>
       <input 
         type="text" 
         maxLength={20} 
@@ -208,13 +212,26 @@ const InputTextBox = ({ onSubmit, placeholder }: { onSubmit: (word: string) => v
         value={word} 
         onChange={(e) => setWord(e.target.value.toLowerCase().trim())}
         style={{
-          width: '100%',
+          flex: 1,
           padding: '10px',
-          fontSize: '16px', // Prevents zoom on mobile
+          fontSize: '16px',
           margin: '10px 0',
           boxSizing: 'border-box'
         }}
       />
+      <button
+        onClick={handleButtonSubmit}
+        style={{
+          padding: '0 15px',
+          margin: '10px 0',
+          cursor: 'pointer',
+          color: 'white',
+          borderRadius: '2px',
+          fontSize: '16px'
+        }}
+      >
+        Go
+      </button>
     </div>
   )
 }

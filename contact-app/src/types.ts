@@ -1,7 +1,7 @@
 export type HistoryEntry = {
-    llmWord: string
-    userWord: string
-    llmResponse: string
-}
+  llmWord: string;
+  userWord: string;
+  llmResponse: string;
+};
 
-export const FinalResponse = 'DONE'
+export const FinalResponse = 'DONE';

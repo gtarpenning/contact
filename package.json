@@ -7,13 +7,19 @@
     "weave": "^0.7.5"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vercel/analytics": "^1.5.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "prettier": "^3.5.1",
     "vite": "^6.1.0"
   },
   "scripts": {
-    "build": "vercel build"
+    "build": "vercel build",
+    "lint": "node scripts/lint.js",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,scss}\""
   }
 }

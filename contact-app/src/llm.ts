@@ -7,39 +7,42 @@
  * @param prevMsg - The previous word.
  * @returns The response from the LLM.
  */
-export const handleMsg = async (msg: string, prevMsg: string): Promise<string> => {
-    try {
-        const response = await fetch(`/api/msg`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ msg, prevMsg }),
-        });
+export const handleMsg = async (
+  msg: string,
+  prevMsg: string
+): Promise<string> => {
+  try {
+    const response = await fetch(`/api/msg`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ msg, prevMsg }),
+    });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        return data.response;
-    } catch (error) {
-        console.error("Error:", error);
-        throw error;
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+
+    const data = await response.json();
+    return data.response;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 };
 
 export const getInitialWord = async (): Promise<string> => {
-    try {
-        const response = await fetch(`/api/random`);        
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        return data.response;
-    } catch (error) {
-        console.error("Error:", error);
-        throw error;
+  try {
+    const response = await fetch(`/api/random`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+
+    const data = await response.json();
+    return data.response;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 };

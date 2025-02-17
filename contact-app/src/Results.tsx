@@ -1,9 +1,12 @@
-import HistoryList from './components/HistoryList'
-import { HistoryEntry } from './types'
+import HistoryList from './components/HistoryList';
+import { HistoryEntry } from './types';
 
-const Results = ({ history, onPlayAgain }: { 
-  history: HistoryEntry[], 
-  onPlayAgain: () => void 
+const Results = ({
+  history,
+  onPlayAgain,
+}: {
+  history: HistoryEntry[];
+  onPlayAgain: () => void;
 }) => {
   return (
     <div style={{ padding: '20px' }}>
@@ -16,20 +19,20 @@ const Results = ({ history, onPlayAgain }: {
         <HistoryList history={history} />
       </div>
       <div style={{ marginTop: '30px' }}>
-        <button 
+        <button
           onClick={onPlayAgain}
           style={{
             padding: '8px 16px',
             fontSize: '16px',
             borderRadius: '4px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Play Again
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Results
+export default Results;

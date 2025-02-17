@@ -1,7 +1,6 @@
 import { OpenAI } from 'openai';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-
 const SYSTEM_PROMPT_S = `
 Find the semantic/logical midpoint between the two words. 
 
@@ -26,24 +25,24 @@ interface MsgRequestBody {
 }
 
 async function handleMsg(msg: string, prevMsg: string): Promise<string> {
-    try {
-      const userPrompt = `word1: ${prevMsg}, word2: ${msg}`;
-      const completion = await client.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT_S },
-          { role: "user", content: userPrompt },
-        ],
-        max_tokens: 20,
-        temperature: 1,
-      });
-  
-      return completion.choices[0].message.content ?? '';
-    } catch (e) {
-      console.error("Error:", e);
-      throw new Error(`Error: ${e}`);
-    }
-  };
+  try {
+    const userPrompt = `word1: ${prevMsg}, word2: ${msg}`;
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT_S },
+        { role: 'user', content: userPrompt },
+      ],
+      max_tokens: 20,
+      temperature: 1,
+    });
+
+    return completion.choices[0].message.content ?? '';
+  } catch (e) {
+    console.error('Error:', e);
+    throw new Error(`Error: ${e}`);
+  }
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'OPTIONS') {
@@ -62,15 +61,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // await weave.login(process.env.WANDB_API_KEY ?? '');
     // await weave.init('contact-ts');
 
-    const body = await req.body as MsgRequestBody;
+    const body = (await req.body) as MsgRequestBody;
     const { msg, prevMsg } = body;
 
     // const handleMsgWrapped = op(handleMsg);
-    
+
     const result = await handleMsg(msg, prevMsg);
     return res.status(200).json({ response: result });
   } catch (e) {
     console.error('Error in handler:', e);
     return res.status(500).json({ error: e });
   }
-} 
+}

@@ -16,8 +16,8 @@ const randomWords = [
   'marxism',
   'sailing',
   'meloncholy',
-  'severed'
-]
+  'severed',
+];
 
 const SENTINEL = '<INSERT>';
 const SYSTEM_PROMPT_INITIAL = `
@@ -31,23 +31,24 @@ ONLY respond with the exact word, nothing else.
 async function getInitialWord() {
   const shuffledWords = [...randomWords].sort(() => Math.random() - 0.5);
   const randomThreeWords = shuffledWords.slice(0, 3);
-  const prompt = SYSTEM_PROMPT_INITIAL.replace(SENTINEL, randomThreeWords.join(', '));
+  const prompt = SYSTEM_PROMPT_INITIAL.replace(
+    SENTINEL,
+    randomThreeWords.join(', ')
+  );
   try {
     const model = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: prompt }
-      ],
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'system', content: prompt }],
       max_tokens: 20,
       temperature: 1.6,
     });
 
     return model.choices[0].message.content?.toLowerCase() ?? '';
   } catch (e) {
-    console.error("Error in getInitialWord:", e);
+    console.error('Error in getInitialWord:', e);
     throw new Error(`Error: ${e}`);
   }
-};
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Handle CORS preflight
@@ -69,10 +70,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // const getInitialWordWrapped = op(getInitialWord);
 
-    const result = await getInitialWord();    
+    const result = await getInitialWord();
     return res.status(200).json({ response: result });
   } catch (e) {
     console.error('Error in handler:', e);
     return res.status(500).json({ error: e });
   }
-} 
+}

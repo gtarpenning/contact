@@ -1,4 +1,5 @@
 import HistoryList from './components/HistoryList';
+import ShareButton from './components/ShareButton';
 import { HistoryEntry } from './types';
 
 const Results = ({
@@ -18,7 +19,14 @@ const Results = ({
       <div style={{ maxWidth: '100%', overflowX: 'hidden' }}>
         <HistoryList history={history} />
       </div>
-      <div style={{ marginTop: '30px' }}>
+      <div
+        style={{
+          marginTop: '30px',
+          display: 'flex',
+          gap: '10px',
+          justifyContent: 'center',
+        }}
+      >
         <button
           onClick={onPlayAgain}
           style={{
@@ -28,8 +36,9 @@ const Results = ({
             cursor: 'pointer',
           }}
         >
-          Play Again
+          Play again
         </button>
+        <ShareButton guessCount={history.length - 1} />
       </div>
     </div>
   );

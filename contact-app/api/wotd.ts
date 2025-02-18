@@ -2,8 +2,16 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Stub word list - can be replaced with a proper word list later
 const wordList = [
-  'cascade', 'whisper', 'nebula', 'zephyr', 'aurora',
-  'horizon', 'enigma', 'quantum', 'stellar', 'velvet',
+  'cascade',
+  'whisper',
+  'nebula',
+  'zephyr',
+  'aurora',
+  'horizon',
+  'enigma',
+  'quantum',
+  'stellar',
+  'velvet',
   // ... add more words as needed
 ];
 
@@ -13,7 +21,7 @@ function getCurrentPSTDate() {
     timeZone: 'America/Los_Angeles',
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
   });
 }
 

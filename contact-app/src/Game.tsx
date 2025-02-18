@@ -258,6 +258,7 @@ const InputTextBox = ({
         maxLength={20}
         placeholder={placeholderText}
         value={word}
+        autoFocus
         onChange={(e) => setWord(e.target.value.toLowerCase().trim())}
         style={{
           flex: 1,

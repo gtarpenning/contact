@@ -274,6 +274,7 @@ const InputTextBox = ({
           margin: '10px 0',
           cursor: 'pointer',
           color: 'white',
+          backgroundColor: '#2c2c2c',
           borderRadius: '2px',
           fontSize: '16px',
         }}

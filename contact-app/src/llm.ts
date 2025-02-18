@@ -11,7 +11,6 @@ export const handleMsg = async (
   msg: string,
   prevMsg: string
 ): Promise<string> => {
-    return Promise.resolve('hello');
   try {
     const response = await fetch(`/api/msg`, {
       method: 'POST',
@@ -34,7 +33,6 @@ export const handleMsg = async (
 };
 
 export const getInitialWord = async (): Promise<string> => {
-  return Promise.resolve('hello');
   try {
     const response = await fetch(`/api/random`);
     if (!response.ok) {

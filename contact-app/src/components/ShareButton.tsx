@@ -3,7 +3,7 @@ interface ShareButtonProps {
 }
 
 const ShareButton = ({ guessCount }: ShareButtonProps) => {
-  const shareText = `I made contact with AI in ${guessCount} guesses, think you can beat me?`;
+  const shareText = `It took me ${guessCount} tries to make contact with AI, think you can beat me?`;
 
   const handleShare = async () => {
     if (navigator.share) {

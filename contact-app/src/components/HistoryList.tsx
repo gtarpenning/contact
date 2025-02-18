@@ -4,13 +4,26 @@ export default function HistoryList({ history }: { history: HistoryEntry[] }) {
   return history.length > 0 ? (
     <div
       style={{
-        marginTop: '30px',
         width: '100%',
         maxWidth: '400px',
         margin: '0 auto',
+        maxHeight: '400px',
+        overflow: 'auto',
+        padding: '0 10px',
+        boxSizing: 'border-box',
       }}
     >
-      <h3>History</h3>
+      <h3
+        style={{
+          position: 'sticky',
+          top: 0,
+          margin: '0',
+          padding: '10px 0',
+          backgroundColor: 'inherit',
+        }}
+      >
+        History
+      </h3>
       <div
         style={{
           display: 'grid',
@@ -19,6 +32,10 @@ export default function HistoryList({ history }: { history: HistoryEntry[] }) {
           gap: '8px',
           fontSize: 'clamp(0.8rem, 3vw, 1rem)',
           justifyContent: 'center',
+          position: 'sticky',
+          top: '43px',
+          padding: '10px 0',
+          backgroundColor: 'inherit',
         }}
       >
         <div style={{ fontWeight: 'bold' }}>You</div>

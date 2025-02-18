@@ -10,7 +10,12 @@ const Results = ({
   onPlayAgain: () => void;
 }) => {
   return (
-    <div style={{ padding: '20px' }}>
+    <div
+      style={{
+        padding: '20px',
+        marginTop: '100px', // Add fixed margin to keep CONTACT header position consistent
+      }}
+    >
       <h1>CONTACT</h1>
       <div>
         <p>You just made contact with an AI...</p>

@@ -30,7 +30,15 @@ function App() {
   return (
     <>
       <Analytics />
-      <div>
+      <div
+        style={{
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transform: 'translateY(-50px)',
+        }}
+      >
         {mode === 'splash' && <Splash onStart={() => setMode('game')} />}
         {mode === 'game' && (
           <Game
